@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Calculator</title>
+    <style>
+        body {
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .calculator {
+            width: 300px;
+            padding: 15px;
+            border-radius: 20px;
+            background: black;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            font-family: "SF Pro Display", sans-serif;
+        }
+        .display {
+            color: white;
+            font-size: 2rem;
+            text-align: right;
+            padding: 10px;
+            background: black;
+            border-radius: 10px;
+            height: 60px;
+            overflow: hidden;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button {
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .gray { background: #a5a5a5; color: black; }
+        .darkgray { background: #333; color: white; }
+        .orange { background: #ff9500; color: white; }
+        .zero { grid-column: span 2; border-radius: 30px; }
+        button:active { opacity: 0.7; }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button class="gray" onclick="clearDisplay()">C</button>
+            <button class="gray" onclick="toggleSign()">+/-</button>
+            <button class="gray" onclick="percent()">%</button>
+            <button class="orange" onclick="appendOperator('/')">÷</button>
+
+            <button class="darkgray" onclick="appendNumber(7)">7</button>
+            <button class="darkgray" onclick="appendNumber(8)">8</button>
+            <button class="darkgray" onclick="appendNumber(9)">9</button>
+            <button class="orange" onclick="appendOperator('*')">×</button>
+
+            <button class="darkgray" onclick="appendNumber(4)">4</button>
+            <button class="darkgray" onclick="appendNumber(5)">5</button>
+            <button class="darkgray" onclick="appendNumber(6)">6</button>
+            <button class="orange" onclick="appendOperator('-')">−</button>
+
+            <button class="darkgray" onclick="appendNumber(1)">1</button>
+            <button class="darkgray" onclick="appendNumber(2)">2</button>
+            <button class="darkgray" onclick="appendNumber(3)">3</button>
+            <button class="orange" onclick="appendOperator('+')">+</button>
+
+            <button class="darkgray zero" onclick="appendNumber(0)">0</button>
+            <button class="darkgray" onclick="appendDot()">.</button>
+            <button class="orange" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById("display");
+        let currentInput = "0";
+        let operator = null;
+        let firstValue = null;
+        let waitingForSecondValue = false;
+
+        function updateDisplay() {
+            display.textContent = currentInput;
+        }
+
+        function appendNumber(num) {
+            if (waitingForSecondValue) {
+                currentInput = String(num);
+                waitingForSecondValue = false;
+            } else {
+                currentInput = currentInput === "0" ? String(num) : currentInput + num;
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            if (!waitingForSecondValue) {
+                firstValue = currentInput;
+                operator = op;
+                waitingForSecondValue = true;
+            }
+        }
+
+        function appendDot() {
+            if (!currentInput.includes(".")) {
+                currentInput += ".";
+                updateDisplay();
+            }
+        }
+
+        function clearDisplay() {
+            currentInput = "0";
+            operator = null;
+            firstValue = null;
+            waitingForSecondValue = false;
+            updateDisplay();
+        }
+
+        function toggleSign() {
+            currentInput = String(parseFloat(currentInput) * -1);
+            updateDisplay();
+        }
+
+        function percent() {
+            currentInput = String(parseFloat(currentInput) / 100);
+            updateDisplay();
+        }
+
+        function calculateResult() {
+            if (operator && firstValue !== null) {
+                currentInput = String(eval(firstValue + operator + currentInput));
+                operator = null;
+                firstValue = null;
+                waitingForSecondValue = false;
+                updateDisplay();
+            }
+        }
+
+        document.addEventListener("keydown", function(event) {
+            const key = event.key;
+            if (!isNaN(key)) {
+                appendNumber(parseInt(key));
+            } else if (key === "+" || key === "-" || key === "*" || key === "/") {
+                appendOperator(key);
+            } else if (key === "Enter" || key === "=") {
+                calculateResult();
+            } else if (key === "Backspace") {
+                currentInput = currentInput.slice(0, -1) || "0";
+                updateDisplay();
+            } else if (key === "Escape") {
+                clearDisplay();
+            } else if (key === ".") {
+                appendDot();
+            }
+        });
+    </script>
+</body>
+</html>
