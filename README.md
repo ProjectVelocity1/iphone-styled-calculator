@@ -1,7 +1,19 @@
-Hello! Thank you for using my own calculator. If you run in a struggle/a function not works make sure to send me a bug report.
-Just to clarify:
--Install fonts to all users(it has a folder for it)
--If you don't know how to, you select all files in it, right click -> install for all users -> yes and wait till it installs, open website and you're good to go!
+# Welcome! 🎉
+
+Thank you for using my custom calculator! If you encounter any issues or notice a malfunctioning function, please don't hesitate to send me a bug report. 
+
+### Quick Setup Guide:
+1. **Font Installation**: 
+   - The fonts need to be installed for all users. A dedicated folder is provided for this purpose.
+   
+2. **Installation Steps**: 
+   - Simply select all files in the folder, right-click, and choose **Install for all users**.
+   - Confirm the installation when prompted, then wait for it to complete.
+
+3. Once done, just open the website and you’re all set to go!
+
+If you need further assistance, feel free to reach out. Enjoy using the calculator! 😄
+
 
 code(with comments, so you can understand it):
 ```
