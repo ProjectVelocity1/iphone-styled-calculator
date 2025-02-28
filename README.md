@@ -8,14 +8,11 @@ code(with comments, so you can understand it):
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Character encoding for the webpage -->
     <meta charset="UTF-8">
-    <!-- Viewport settings for responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Title of the calculator page -->
     <title>iPhone Calculator</title>
     <style>
-        /* General styles for the body to center the calculator */
+        /* Basic styling for body */
         body {
             background: black;
             display: flex;
@@ -23,7 +20,8 @@ code(with comments, so you can understand it):
             align-items: center;
             height: 100vh;
         }
-        /* Style for the calculator container */
+
+        /* Calculator container styling */
         .calculator {
             width: 300px;
             padding: 15px;
@@ -32,7 +30,8 @@ code(with comments, so you can understand it):
             box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
             font-family: "SF Pro Display", sans-serif;
         }
-        /* Style for the display area */
+
+        /* Display screen styling */
         .display {
             color: white;
             font-size: 2rem;
@@ -43,14 +42,16 @@ code(with comments, so you can understand it):
             height: 60px;
             overflow: hidden;
         }
-        /* Button grid styles */
+
+        /* Button grid styling */
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
             margin-top: 10px;
         }
-        /* Styles for individual buttons */
+
+        /* General button styling */
         button {
             height: 60px;
             border-radius: 50%;
@@ -59,28 +60,31 @@ code(with comments, so you can understand it):
             cursor: pointer;
             transition: 0.2s;
         }
-        /* Color styles for different button types */
+
+        /* Button colors */
         .gray { background: #a5a5a5; color: black; }
         .darkgray { background: #333; color: white; }
         .orange { background: #ff9500; color: white; }
+
+        /* Zero button styling */
         .zero { grid-column: span 2; border-radius: 30px; }
-        /* Button click effect */
+
+        /* Button active state */
         button:active { opacity: 0.7; }
     </style>
 </head>
 <body>
     <div class="calculator">
-        <!-- Display for showing current input or result -->
+        <!-- Display screen where numbers are shown -->
         <div class="display" id="display">0</div>
-        <!-- Buttons for the calculator -->
+        
+        <!-- Buttons grid for calculator -->
         <div class="buttons">
-            <!-- Buttons for clearing, toggling sign, percentage, and operators -->
             <button class="gray" onclick="clearDisplay()">C</button>
             <button class="gray" onclick="toggleSign()">+/-</button>
             <button class="gray" onclick="percent()">%</button>
             <button class="orange" onclick="appendOperator('/')">÷</button>
 
-            <!-- Number buttons -->
             <button class="darkgray" onclick="appendNumber(7)">7</button>
             <button class="darkgray" onclick="appendNumber(8)">8</button>
             <button class="darkgray" onclick="appendNumber(9)">9</button>
@@ -103,105 +107,105 @@ code(with comments, so you can understand it):
     </div>
 
     <script>
-        // Initial variables for the display and calculation logic
-        let display = document.getElementById("display");
-        let currentInput = "0"; // Current input on display
-        let operator = null; // Current operator (+, -, *, /)
-        let firstValue = null; // First value for the operation
-        let waitingForSecondValue = false; // Flag to check if we are waiting for second operand
+        /* Variable declarations for calculator functionality */
+        let display = document.getElementById("display");  // The calculator display element
+        let currentInput = "0";  // Stores the current input as a string
+        let operator = null;  // Stores the current operator for calculation
+        let firstValue = null;  // Stores the first number before an operator
+        let waitingForSecondValue = false;  // Flag to check if waiting for second input after an operator
 
-        // Update the display to show the current input
+        /* Function to update the calculator display with the current input */
         function updateDisplay() {
             display.textContent = currentInput;
         }
 
-        // Append a number to the current input
+        /* Function to append a number to the current input */
         function appendNumber(num) {
-            // If waiting for the second value, start a new number
+            // If waiting for the second value after an operator
             if (waitingForSecondValue) {
-                currentInput = String(num);
-                waitingForSecondValue = false;
+                currentInput = String(num);  // Start a new number
+                waitingForSecondValue = false;  // Reset flag
             } else {
-                // If the current input is "0", replace it with the number
-                // Otherwise, append the number to the current input
-                currentInput = currentInput === "0" ? String(num) : currentInput + num;
+                currentInput = currentInput === "0" ? String(num) : currentInput + num;  // Append number to input
             }
-            updateDisplay();
+            updateDisplay();  // Update the display
         }
 
-        // Append an operator (+, -, *, /) to the calculation
+        /* Function to append an operator to the calculation */
         function appendOperator(op) {
-            // Only proceed if not waiting for second value
             if (!waitingForSecondValue) {
-                firstValue = currentInput;
-                operator = op;
-                waitingForSecondValue = true;
+                firstValue = currentInput;  // Store the first number
+                operator = op;  // Store the operator
+                waitingForSecondValue = true;  // Set flag to wait for second value
             }
         }
 
-        // Append a decimal point to the current input
+        /* Function to append a decimal point to the current input */
         function appendDot() {
-            // Add a dot only if there isn't one already
-            if (!currentInput.includes(".")) {
-                currentInput += ".";
-                updateDisplay();
+            if (!currentInput.includes(".")) {  // Check if decimal already exists
+                currentInput += ".";  // Add decimal point
+                updateDisplay();  // Update the display
             }
         }
 
-        // Clear the display and reset all variables
+        /* Function to clear the display */
         function clearDisplay() {
-            currentInput = "0";
-            operator = null;
-            firstValue = null;
-            waitingForSecondValue = false;
-            updateDisplay();
+            currentInput = "0";  // Reset current input
+            operator = null;  // Reset operator
+            firstValue = null;  // Reset first value
+            waitingForSecondValue = false;  // Reset flag
+            updateDisplay();  // Update the display
         }
 
-        // Toggle the sign of the current input (positive/negative)
+        /* Function to toggle the sign of the current input (positive/negative) */
         function toggleSign() {
-            currentInput = String(parseFloat(currentInput) * -1);
-            updateDisplay();
+            currentInput = String(parseFloat(currentInput) * -1);  // Multiply by -1 to toggle sign
+            updateDisplay();  // Update the display
         }
 
-        // Convert the current input to a percentage
+        /* Function to calculate the percentage of the current input */
         function percent() {
-            currentInput = String(parseFloat(currentInput) / 100);
-            updateDisplay();
+            currentInput = String(parseFloat(currentInput) / 100);  // Divide input by 100
+            updateDisplay();  // Update the display
         }
 
-        // Perform the calculation based on the operator and values
+        /* Function to calculate the result of the operation */
         function calculateResult() {
             if (operator && firstValue !== null) {
-                // Use eval to evaluate the expression (e.g., 5 + 3)
-                currentInput = String(eval(firstValue + operator + currentInput));
-                operator = null; // Reset the operator
-                firstValue = null; // Reset the first value
-                waitingForSecondValue = false; // Reset the flag
-                updateDisplay();
+                currentInput = String(eval(firstValue + operator + currentInput));  // Perform the calculation
+                operator = null;  // Reset operator
+                firstValue = null;  // Reset first value
+                waitingForSecondValue = false;  // Reset flag
+                updateDisplay();  // Update the display
             }
         }
 
-        // Add keyboard support for the calculator
+        /* Add event listener for keyboard input */
         document.addEventListener("keydown", function(event) {
             const key = event.key;
+            // Handle number keys
             if (!isNaN(key)) {
-                // If the key is a number, append it to the display
                 appendNumber(parseInt(key));
-            } else if (key === "+" || key === "-" || key === "*" || key === "/") {
-                // If the key is an operator, append it
+            } 
+            // Handle operator keys
+            else if (key === "+" || key === "-" || key === "*" || key === "/") {
                 appendOperator(key);
-            } else if (key === "Enter" || key === "=") {
-                // If Enter is pressed, calculate the result
+            } 
+            // Handle equal sign or Enter key
+            else if (key === "Enter" || key === "=") {
                 calculateResult();
-            } else if (key === "Backspace") {
-                // Backspace will delete the last character
-                currentInput = currentInput.slice(0, -1) || "0";
-                updateDisplay();
-            } else if (key === "Escape") {
-                // Escape will clear the display
+            } 
+            // Handle backspace for deleting last input
+            else if (key === "Backspace") {
+                currentInput = currentInput.slice(0, -1) || "0";  // Remove last character
+                updateDisplay();  // Update the display
+            } 
+            // Handle Escape key to clear the display
+            else if (key === "Escape") {
                 clearDisplay();
-            } else if (key === ".") {
-                // Dot key will append a dot
+            } 
+            // Handle decimal point key
+            else if (key === ".") {
                 appendDot();
             }
         });
