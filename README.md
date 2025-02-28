@@ -1,4 +1,4 @@
-Hello! Thank you for using my own calculator. If you run in a struggle/a function not works send me an email to hsjs6505@gmail.com
+Hello! Thank you for using my own calculator. If you run in a struggle/a function not works make sure to send me a bug report.
 Just to clarify:
 -Install fonts to all users(it has a folder for it)
 -If you don't know how to, you select all files in it, right click -> install for all users -> yes and wait till it installs, open website and you're good to go!
