@@ -4,7 +4,7 @@ Just to clarify:
 -If you don't know how to, you select all files in it, right click -> install for all users -> yes and wait till it installs, open website and you're good to go!
 
 code(with comments, so you can understand it):
-
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -208,3 +208,4 @@ code(with comments, so you can understand it):
     </script>
 </body>
 </html>
+```
