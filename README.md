@@ -12,9 +12,6 @@ Thank you for using my custom calculator! If you encounter any issues or notice 
 
 3. Once done, just open the website and you’re all set to go!
 
-If you need further assistance, feel free to reach out. Enjoy using the calculator! 😄
-
-
 code(with comments, so you can understand it):
 ```
 <!DOCTYPE html>
