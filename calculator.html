@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scientific Calculator</title>
+    <title>iPhone Calculator</title>
     <style>
         body {
             background: black;
@@ -95,7 +95,6 @@
             <button class="orange" onclick="calculateResult()">=</button>
             <button class="gray" onclick="appendFunction('Math.tan')">tan</button>
 
-            <!-- Clear History Button -->
             <button class="gray" onclick="clearHistory()">Clear History</button>
         </div>
     </div>
@@ -164,10 +163,8 @@
         function squareRoot() {
             let inputValue = parseFloat(currentInput.replace(/,/g, ""));
             if (inputValue < 0) {
-                // Handle complex numbers
-                let realPart = 0;
-                let imaginaryPart = Math.sqrt(Math.abs(inputValue));
-                currentInput = `${realPart} + ${imaginaryPart}i`;
+                let imaginaryPart = Math.sqrt(-inputValue);
+                currentInput = `0 + ${imaginaryPart}i`;
             } else {
                 currentInput = String(Math.sqrt(inputValue));
             }
@@ -182,7 +179,7 @@
         function calculateResult() {
             if (operator && firstValue !== null) {
                 currentInput = String(eval(firstValue + operator + currentInput.replace(/,/g, "")));
-                history.push(firstValue + " " + operator + " " + currentInput);  // Add to history
+                history.push(firstValue + " " + operator + " " + currentInput);
                 operator = null;
                 firstValue = null;
                 waitingForSecondValue = false;
