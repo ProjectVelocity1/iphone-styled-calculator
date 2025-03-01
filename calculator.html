@@ -162,7 +162,15 @@
         }
 
         function squareRoot() {
-            currentInput = String(Math.sqrt(parseFloat(currentInput.replace(/,/g, ""))));
+            let inputValue = parseFloat(currentInput.replace(/,/g, ""));
+            if (inputValue < 0) {
+                // Handle complex numbers
+                let realPart = 0;
+                let imaginaryPart = Math.sqrt(Math.abs(inputValue));
+                currentInput = `${realPart} + ${imaginaryPart}i`;
+            } else {
+                currentInput = String(Math.sqrt(inputValue));
+            }
             updateDisplay();
         }
 
