@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iPhone Calculator</title>
+    <title>Scientific Calculator</title>
     <style>
         body {
             background: black;
@@ -13,7 +13,7 @@
             height: 100vh;
         }
         .calculator {
-            width: 300px;
+            width: 340px;
             padding: 15px;
             border-radius: 20px;
             background: black;
@@ -30,16 +30,26 @@
             height: 60px;
             overflow: hidden;
         }
+        .history {
+            color: white;
+            font-size: 1rem;
+            max-height: 100px;
+            overflow-y: scroll;
+            margin-top: 10px;
+            background: #222;
+            padding: 10px;
+            border-radius: 10px;
+        }
         .buttons {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 10px;
             margin-top: 10px;
         }
         button {
             height: 60px;
             border-radius: 50%;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             border: none;
             cursor: pointer;
             transition: 0.2s;
@@ -54,42 +64,58 @@
 <body>
     <div class="calculator">
         <div class="display" id="display">0</div>
+        <div class="history" id="history"></div>
         <div class="buttons">
             <button class="gray" onclick="clearDisplay()">C</button>
             <button class="gray" onclick="toggleSign()">+/-</button>
             <button class="gray" onclick="percent()">%</button>
             <button class="orange" onclick="appendOperator('/')">÷</button>
+            <button class="gray" onclick="appendOperator('**')">xʸ</button>
 
             <button class="darkgray" onclick="appendNumber(7)">7</button>
             <button class="darkgray" onclick="appendNumber(8)">8</button>
             <button class="darkgray" onclick="appendNumber(9)">9</button>
             <button class="orange" onclick="appendOperator('*')">×</button>
+            <button class="gray" onclick="squareRoot()">√</button>
 
             <button class="darkgray" onclick="appendNumber(4)">4</button>
             <button class="darkgray" onclick="appendNumber(5)">5</button>
             <button class="darkgray" onclick="appendNumber(6)">6</button>
             <button class="orange" onclick="appendOperator('-')">−</button>
+            <button class="gray" onclick="appendFunction('Math.sin')">sin</button>
 
             <button class="darkgray" onclick="appendNumber(1)">1</button>
             <button class="darkgray" onclick="appendNumber(2)">2</button>
             <button class="darkgray" onclick="appendNumber(3)">3</button>
             <button class="orange" onclick="appendOperator('+')">+</button>
+            <button class="gray" onclick="appendFunction('Math.cos')">cos</button>
 
             <button class="darkgray zero" onclick="appendNumber(0)">0</button>
             <button class="darkgray" onclick="appendDot()">.</button>
             <button class="orange" onclick="calculateResult()">=</button>
+            <button class="gray" onclick="appendFunction('Math.tan')">tan</button>
+
+            <!-- Clear History Button -->
+            <button class="gray" onclick="clearHistory()">Clear History</button>
         </div>
     </div>
 
     <script>
         let display = document.getElementById("display");
+        let historyDisplay = document.getElementById("history");
         let currentInput = "0";
         let operator = null;
         let firstValue = null;
         let waitingForSecondValue = false;
+        let history = [];
 
         function updateDisplay() {
-            display.textContent = currentInput;
+            display.textContent = formatNumber(currentInput);
+        }
+
+        function formatNumber(num) {
+            if (num.includes(".")) return num;
+            return parseFloat(num).toLocaleString();
         }
 
         function appendNumber(num) {
@@ -104,7 +130,7 @@
 
         function appendOperator(op) {
             if (!waitingForSecondValue) {
-                firstValue = currentInput;
+                firstValue = currentInput.replace(/,/g, "");
                 operator = op;
                 waitingForSecondValue = true;
             }
@@ -126,23 +152,44 @@
         }
 
         function toggleSign() {
-            currentInput = String(parseFloat(currentInput) * -1);
+            currentInput = String(parseFloat(currentInput.replace(/,/g, "")) * -1);
             updateDisplay();
         }
 
         function percent() {
-            currentInput = String(parseFloat(currentInput) / 100);
+            currentInput = String(parseFloat(currentInput.replace(/,/g, "")) / 100);
+            updateDisplay();
+        }
+
+        function squareRoot() {
+            currentInput = String(Math.sqrt(parseFloat(currentInput.replace(/,/g, ""))));
+            updateDisplay();
+        }
+
+        function appendFunction(func) {
+            currentInput = String(eval(`${func}(${parseFloat(currentInput.replace(/,/g, ""))})`));
             updateDisplay();
         }
 
         function calculateResult() {
             if (operator && firstValue !== null) {
-                currentInput = String(eval(firstValue + operator + currentInput));
+                currentInput = String(eval(firstValue + operator + currentInput.replace(/,/g, "")));
+                history.push(firstValue + " " + operator + " " + currentInput);  // Add to history
                 operator = null;
                 firstValue = null;
                 waitingForSecondValue = false;
                 updateDisplay();
+                updateHistory();
             }
+        }
+
+        function updateHistory() {
+            historyDisplay.innerHTML = history.map(item => `<div>${item}</div>`).join("");
+        }
+
+        function clearHistory() {
+            history = [];
+            updateHistory();
         }
 
         document.addEventListener("keydown", function(event) {
@@ -160,6 +207,16 @@
                 clearDisplay();
             } else if (key === ".") {
                 appendDot();
+            } else if (key === "^") {
+                appendOperator("**");
+            } else if (key === "s") {
+                appendFunction("Math.sin");
+            } else if (key === "c") {
+                appendFunction("Math.cos");
+            } else if (key === "t") {
+                appendFunction("Math.tan");
+            } else if (key === "r") {
+                squareRoot();
             }
         });
     </script>
